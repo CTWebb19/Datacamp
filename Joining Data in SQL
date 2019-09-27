@@ -735,8 +735,82 @@ WHERE life_expectancy > 1.15 *
   WHERE year = 2015)
 AND year = 2015;
 
+##### Subquery inside where (2)
+
+-- 2. Select fields
+SELECT name, country_code, urbanarea_pop
+  -- 3. From cities
+  FROM cities 
+-- 4. Where city name in the field of capital cities
+WHERE name IN
+  -- 1. Subquery
+  (SELECT capital 
+   FROM countries)
+ORDER BY urbanarea_pop DESC;
+
+####### Subquery inside select
+
+2/2
+
+SELECT countries.name AS country,
+  (SELECT COUNT(*)
+   FROM cities
+   WHERE countries.code = cities.country_code) AS cities_num
+FROM countries
+ORDER BY cities_num DESC, country
+LIMIT 9;
+
+########### Subquery inside from
+1/2
 
 
+-- Select fields (with aliases)
+SELECT code, COUNT(name) as lang_num
+  -- From languages
+  FROM languages
+-- Group by code
+GROUP BY code;
 
+2/2
+########### Wrong code!! even though it is the exact same as the correct code
+-- Select fields
+SELECT local_name, subquery.lang_num
+  -- From countries
+  FROM countries,
+  	-- Subquery (alias as subquery)
+  	(SELECT code, COUNT(name) as lang_num
+  From languages
+  GROUP by code) AS subquery
+  -- Where codes match
+WHERE countries.code = subquery.code
+-- Order by descending number of languages
+GROUP BY lang_num;
+
+##### side by side from correct code
+SELECT local_name, subquery.lang_num
+SELECT local_name, subquery.lang_num
+FROM countries,
+FROM countries,
+(SELECT code, COUNT(name) AS lang_num
+(SELECT code, COUNT(name) as lang_num
+FROM languages  
+From languages
+GROUP BY code) as subquery
+GROUP by code) AS subquery
+WHERE countries.code = subquery.code
+WHERE countries.code = subquery.code
+ORDER BY lang_num DESC;
+GROUP BY lang_num DESC;
+
+** Correct code for 2/2 
+SELECT local_name, subquery.lang_num
+FROM countries,
+(SELECT code, COUNT(name) AS lang_num
+FROM languages
+GROUP BY code) as subquery
+WHERE countries.code = subquery.code
+ORDER BY lang_num DESC;
+
+### this kind of stuff gets me upset with online learning stuff. 
 
 
