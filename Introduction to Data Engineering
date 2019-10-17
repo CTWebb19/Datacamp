@@ -1,0 +1,180 @@
+### This course came to my inbox and I am really glad I took it. It exposed me to many of the best tools for database management and other cloud based technologies. 
+
+***Tasks of the data engineer
+Set up scheduled ingestion of data from the application databases to an analytical database
+
+
+***Data engineer or data scientist?
+
+Data engineer or
+Set up Process to bring together data
+develop scalable data architecture
+streamline data aquisition
+clean currupt data
+cluod technology
+
+data scientist
+clean statistical outliers
+predictive modeling using ML
+statistical modeling 
+mining data patterns
+monitor business processes
+
+
+***Data engineering problems
+As the first data engineer, you observe some problems and have to decide where you're best suited to be of help.
+
+
+Data scientists are querying the online store databases directly 
+and slowing down the functioning of the application since it's using the same database.
+
+***Kinds of databases
+However, databases are not always the first step. Sometimes, data has to be pulled in 
+from external APIs or raw files. Can you identify the database in the schematics?
+
+Accounting, Online Store, Product Catalog, and Analytics are databases.
+
+
+***Processing tasks
+In the diagram, this is the intermediate step. Can you select the most 
+correct statement about data processing?
+Data processing is distributed over clusters of virtual machines.
+
+***Scheduling tools
+Do you know which one is not a responsibility of the scheduler?
+
+Scale up the number of nodes when there's lots of data to be processed.
+
+
+***Why cloud computing?
+In the video you saw the benefits of using cloud 
+computing as opposed to self-hosting data centers. Can you select the most correct statement about cloud computing?
+
+The cloud can provide you with the resources you need, when you need them.
+press
+
+
+***Big players in cloud computing
+AWS
+Azure
+Google
+
+
+***Cloud services
+
+
+#### Databases --- ETL
+SQL vs NoSQL
+
+***The database schema
+
+# Complete the SELECT statement
+data = pd.read_sql("""
+SELECT first_name, last_name FROM "Customer"
+ORDER BY last_name, first_name
+""", db_engine)
+
+# Show the first 3 rows of the DataFrame
+print(data.head(3))
+
+# Show the info of the DataFrame
+print(data.info())
+
+
+***Joining on relations
+
+# Complete the SELECT statement
+data = pd.read_sql("""
+SELECT * FROM "Customer"
+INNER JOIN "Order"
+ON "Order"."customer_id"="Customer"."id"
+""", db_engine)
+
+# Show the id column of data
+print(data.id)
+
+
+
+***From task to subtasks
+# Function to apply a function over multiple cores
+@print_timing
+def parallel_apply(apply_func, groups, nb_cores):
+    with Pool(nb_cores) as p:
+        results = p.map(apply_func, groups)
+    return pd.concat(results)
+
+# Parallel apply using 1 core
+parallel_apply(take_mean_age, athlete_events.groupby('Year'), nb_cores = 1)
+
+# Parallel apply using 2 cores
+parallel_apply(take_mean_age, athlete_events.groupby('Year'), nb_cores = 2)
+
+# Parallel apply using 4 cores
+parallel_apply(take_mean_age, athlete_events.groupby('Year'), nb_cores = 4)
+
+
+Using a DataFrame
+
+import dask.dataframe as dd
+
+# Set the number of partitions
+athlete_events_dask = dd.from_pandas(athlete_events, npartitions = 4 )
+
+
+*** A PySpark groupby
+# Print the type of athlete_events_spark
+print(type(athlete_events_spark))
+
+# Print the schema of athlete_events_spark
+print(athlete_events_spark.printSchema())
+
+# Group by the Year, and find the mean Age
+print(athlete_events_spark.groupBy('Year').mean('Age'))
+
+# Group by the Year, and find the mean Age
+print(athlete_events_spark.groupBy('Year').mean('Age').show())
+
+Airflow DAGs
+# Create the DAG object
+dag = DAG(dag_id="car_factory_simulation",
+          default_args={"owner": "airflow","start_date": airflow.utils.dates.days_ago(2)},
+          schedule_interval="0 * * * *")
+
+
+
+---------------------
+Defining a DAG
+
+# Define the ETL function
+def etl():
+    film_df = extract_film_to_pandas()
+    film_df = transform_rental_rate(film_df)
+    load_dataframe_to_film(film_df)
+
+# Define the ETL task using PythonOperator
+etl_task = PythonOperator(task_id='etl_heart_disease',
+                          python_callable=etl,
+                          dag=dag)
+
+# Set the upstream to wait_for_table and sample run etl()
+etl_task.set_upstream(wait_for_table)
+etl()
+
+
+### this one ^ was tricky...
+
+
+
+****Setting up Airflow
+Which files does the DAGs folder have after you moved the file?
+
+It has two DAG files: dag.py and dag_recommendations.py.
+
+
+****Interpreting the DAG
+Now that you've placed the DAG file in the correct place, it's time to check out the Airflow Web UI.
+
+Can you find the scheduled interval of the sample DAG?
+
+Daily at midnight.
+## refer to the notes 
